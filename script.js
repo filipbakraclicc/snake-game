@@ -9,10 +9,20 @@ let snakeBody = [];
 let velocityX = 0,
   velocityY = 0;
 
+let gameOver = false;
+let setIntervalId;
+
 const changeFoodPosition = () => {
     // passing random 1-30 value as food position
     foodX = Math.floor(Math.random() * 30) + 1;
     foodY = Math.floor(Math.random() * 30) + 1;
+};
+
+const handleGameOver = () => {
+  // clearing the interval timer and reloading the page on game over
+  clearInterval(setIntervalId);
+  alert('Game Over!');
+  location.reload();
 };
 
 const changeDirection = (e) => {
@@ -34,6 +44,8 @@ const changeDirection = (e) => {
   };
 
 const initGame = () => {
+    if (gameOver) return handleGameOver();
+
     let htmlMarkup = `<div class="food" style="grid-area: ${foodY} / ${foodX} "></div>`;
 
     // checking if snake hit the food
@@ -48,7 +60,12 @@ const initGame = () => {
     // updating snake head
     snakeX += velocityX;
     snakeY += velocityY;
-
+    
+    // Checking if snakes head is out of walls, setting game over
+    if (snakeX <= 0 || snakeX > 30 || snakeY <= 0 || snakeY > 30) {
+      console.log('Game over');
+      gameOver = true;
+    }
 
     for (let i = 0; i < snakeBody.length; i++) {
         // adding div for each part of snake body
@@ -59,5 +76,5 @@ const initGame = () => {
 };
 
 changeFoodPosition();
-setInterval(initGame, 125); // 125 - snake speed
+setIntervalId = setInterval(initGame, 125); // 125 - snake speed
 document.addEventListener('keydown', changeDirection);
