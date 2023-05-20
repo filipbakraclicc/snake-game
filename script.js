@@ -1,5 +1,6 @@
 const playBoard = document.querySelector('.play-board');
 const scoreElement = document.querySelector('.score');
+const highScoreElement = document.querySelector('.high-score');
 
 let foodX, foodY;
 
@@ -14,6 +15,8 @@ let gameOver = false;
 let setIntervalId;
 
 let score = 0;
+let highScore = localStorage.getItem('high-score') || 0;
+highScoreElement.innerText = `High Score: ${highScore}`;
 
 const changeFoodPosition = () => {
     // passing random 1-30 value as food position
@@ -59,6 +62,10 @@ const initGame = () => {
 
         score++; // increment score by 1
         scoreElement.innerText = `Score: ${score}`;
+
+        highScore = score >= highScore ? score : highScore;
+        localStorage.setItem('high-score', highScore);
+        highScoreElement.innerText = `High Score: ${highScore}`;
     }
 
     snakeBody[0] = [snakeX, snakeY]; // setting first element of snake body
